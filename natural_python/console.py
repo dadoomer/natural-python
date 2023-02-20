@@ -7,10 +7,11 @@ import argparse
 from natural_python import language_model_api
 from natural_python import interpreter
 from pathlib import Path
+import json
 
 
 # Is this a security risk?
-api_key_file = Path(__file__).parent/'api_key.txt'
+api_file = Path(__file__).parent/'api.json'
 
 help_keyword = "help"
 exit_keyword = "exit"
@@ -179,20 +180,25 @@ def repl(
 def main():
     # Check if API key is present
     try:
-        with open(api_key_file, "rt") as fp:
-            api_key = fp.read()
+        with open(api_file, "rt") as fp:
+            api_config = json.load(fp)
     except FileNotFoundError:
         print("Initial configuration. You will only have to do this once.")
         print("Get an API key at https://goose.ai/dashboard/apikeys.")
-        api_key = input("GooseAI/OpenAI API key: ")
-        with open(api_key_file, "wt") as fp:
-            fp.write(api_key)
-        print(f"Wrote {api_key_file}")
+        api_base = input("API base (e.g. https://api.goose.ai/v1, https://api.openai.com/v1): ")
+        api_key = input("API key: ")
+        api_config = dict(
+            api_key=api_key,
+            api_base=api_base,
+        )
+        with open(api_file, "wt") as fp:
+            json.dump(api_config, fp)
+        print(f"Wrote {api_file}")
 
     # Parse arguments
     parser = argparse.ArgumentParser(
             description='Natural Python interpreter.',
-            epilog=f'The API key file {api_key_file}. Delete this file if you want to change keys',
+            epilog=f'The API configuration file is {api_file}. Delete this file if you want to change keys',
         )
     parser.add_argument(
         '--engine_id',
@@ -225,12 +231,6 @@ def main():
         default="python3",
     )
     parser.add_argument(
-        '--api_base',
-        help="API endpoint. Currently only GooseAI and OpenAI are supported.",
-        type=str,
-        default="https://api.goose.ai/v1",
-    )
-    parser.add_argument(
         '--show-engines',
         help="Display available engines.",
         action='store_true',
@@ -244,6 +244,8 @@ def main():
     args = parser.parse_args()
 
     # Handle arguments
+    api_key = api_config['api_key']
+    api_base = api_config['api_base']
     if args.show_engines:
         engines = language_model_api.get_engines(
             api_key=api_key,
@@ -259,7 +261,7 @@ def main():
             api_key=api_key,
             completion_n=args.completion_n,
             python_shell=args.python_shell,
-            api_base=args.api_base,
+            api_base=api_base,
             max_prediction_tokens=args.max_prediction_tokens,
             prediction_temperature=args.prediction_temperature,
         )
