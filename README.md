@@ -1,5 +1,7 @@
 # natural-python
 
+[Official Gitlab repo](https://gitlab.com/da_doomer/natural-python) | [Github mirror](https://github.com/dadoomer/natural-python)
+
 Natural Python is an intermediary between you (who speaks in natural language)
 and the computer (who speaks Python).
 
@@ -33,3 +35,5 @@ the interpreter will write the following code:
 ## Installation
 
 `pip install --user git+https://gitlab.com/da_doomer/natural-python.git`
+
+Then simply execute `natural-python` in your shell.
