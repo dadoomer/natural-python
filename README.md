@@ -1,5 +1,7 @@
 # natural-python
 
+[Official Gitlab repo](https://gitlab.com/da_doomer/natural-python) | [Github mirror](https://github.com/dadoomer/natural-python)
+
 Natural Python is an intermediary between you (who speaks in natural language)
 and the computer (who speaks Python).
 
