@@ -17,15 +17,17 @@ help_keyword = "help"
 exit_keyword = "exit"
 constraint_keyword = "finally:"
 restart_keyword = "restart"
+python_keyword = "python"
 keywords = [
     help_keyword,
     exit_keyword,
     constraint_keyword,
     restart_keyword,
+    python_keyword,
 ]
 
 help_message = "\n".join([
-    "DO NOT ATTEMPT TO EXECUTE CODE THAT MODIFIES YOUR FILESYSTEM. INTERACTING WITH THIS TOOL IS EXTREMELY RISKY, DO AT YOUR OWN PERIL.",
+    "DO NOT ATTEMPT, EVER, TO EXECUTE CODE THAT MODIFIES YOUR FILESYSTEM. INTERACTING WITH THIS TOOL IS EXTREMELY RISKY, DO SO AT YOUR OWN PERIL.",
     "In Natural Python, you primarily express intent with natural language.",
     "",
     "A block of commented lines represents your intent.",
@@ -46,12 +48,15 @@ help_message = "\n".join([
 class State(Enum):
     reading_instruction = auto()
     reading_constraint = auto()
+    reading_raw_code = auto()
     restarting_instruction_reading = auto()
     ready_to_execute = auto()
 
 
 class ParseException(Exception):
     """Raised when the user provides an input of invalid format."""
+    def __init__(self, cause: str):
+        self.cause = cause
 
 
 def print_start_message(
@@ -62,6 +67,7 @@ def print_start_message(
         f"Language model engine ID: {engine_id}",
         f"Type {exit_keyword} to exit.",
         f"Type {restart_keyword} to erase your current instruction.",
+        f"Type {python_keyword} to bypass the Natural Python interpreter and write raw Python to the stream.",
         f"Type {help_keyword} for more information.",
     ])
     print(start_message)
@@ -130,7 +136,9 @@ def repl(
             # Read user input
             if state is State.reading_instruction:
                 prompt = ">>> # "
-            else:
+            elif state is State.reading_raw_code:
+                prompt = ">>> "
+            else:  # state is State.reading_constraint
                 prompt = "+++ "
 
             # Parse input
@@ -149,11 +157,15 @@ def repl(
                     elif user_input == constraint_keyword:
                         # Constraint reading can only happen when reading instructions
                         if state != State.reading_instruction:
-                            raise ParseException()
+                            raise ParseException(f"You can only use '{constraint_keyword}' while providing instructions!")
                         # Start constraint reading
                         state = State.reading_constraint
                     elif user_input == restart_keyword:
                         state = State.restarting_instruction_reading
+                    elif user_input == python_keyword:
+                        if len(current_instruction) != 0 or len(current_constraint) != 0:
+                            raise ParseException(f"You can only use '{python_keyword}' before providing any instructions or constraints!")
+                        state = State.reading_raw_code
                 elif len(user_input) == 0:
                     # Block end
                     # If the block is empty, restart reading
@@ -167,13 +179,16 @@ def repl(
                 elif state is State.reading_constraint:
                     # Continue reading instructions
                     current_constraint.append(user_input)
+                elif state is State.reading_raw_code:
+                    current_python_code.append(user_input)
                 else:
                     # This should never happen
-                    raise ParseException()
+                    raise ParseException("You did not format your input correctly... try again...")
             except EOFError:
                 keep_interpreting = False
-            except ParseException:
-                print("You did not format your instruction correctly. Try again...")
+            except ParseException as e:
+                print(e.cause)
+                state = State.restarting_instruction_reading
     return current_python_code
 
 
