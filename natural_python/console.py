@@ -6,6 +6,7 @@ from pathlib import Path
 import argparse
 from natural_python import language_model_api
 from natural_python import interpreter
+from pathlib import Path
 
 
 # Is this a security risk?
@@ -73,8 +74,8 @@ def repl(
         completion_n: int,
         prediction_temperature: float,
         python_shell: str,
-        ):
-    """Read-eval-print loop."""
+        ) -> list[str]:
+    """Read-eval-print loop. Returns the executed python code."""
     print_start_message(
         engine_id=engine_id,
     )
@@ -172,6 +173,7 @@ def repl(
                 keep_interpreting = False
             except ParseException:
                 print("You did not format your instruction correctly. Try again...")
+    return current_python_code
 
 
 def main():
@@ -233,6 +235,12 @@ def main():
         help="Display available engines.",
         action='store_true',
     )
+    parser.add_argument(
+        '--output',
+        help="Write the source code to a file at the end of the session.",
+        type=Path,
+        default=None,
+    )
     args = parser.parse_args()
 
     # Handle arguments
@@ -246,7 +254,7 @@ def main():
         engine_id = args.engine_id
         if engine_id not in language_model_api.get_engine_ids(api_key):
             raise ValueError(f'Invalid engine {engine_id}')
-        repl(
+        code = repl(
             engine_id=engine_id,
             api_key=api_key,
             completion_n=args.completion_n,
@@ -255,3 +263,8 @@ def main():
             max_prediction_tokens=args.max_prediction_tokens,
             prediction_temperature=args.prediction_temperature,
         )
+
+        # Write interaction if requested
+        if args.output is not None:
+            with open(args.output, "wt") as fp:
+                fp.write("\n".join(code))
