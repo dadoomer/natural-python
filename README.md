@@ -35,3 +35,5 @@ the interpreter will write the following code:
 ## Installation
 
 `pip install --user git+https://gitlab.com/da_doomer/natural-python.git`
+
+Then simply execute `natural-python` in your shell.
