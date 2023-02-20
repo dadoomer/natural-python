@@ -32,4 +32,4 @@ Type help for more information.
 
 ## Installation
 
-`$ pip install -u git+https://gitlab.com/da_doomer/natural-python.git`
+`pip install -u git+https://gitlab.com/da_doomer/natural-python.git`
