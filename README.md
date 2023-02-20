@@ -7,18 +7,18 @@ More concretely, this is a wrapper around the Python REPL which uses LLMs to sea
 
 ## Example
 
-Hello world session:
+Hello world session: given this input
 
 ```python
-Natural Python 0.1.0 on Python 3.10.6
-Language model engine ID: gpt-neo-125m
-Type exit to exit.
-Type restart to erase your current instruction.
-Type help for more information.
 >>> # Create a list with the days of the week, call it 'days'
 >>> # finally:
 +++ assert days[0] == 'Monday'
 +++
+```
+
+the interpreter will write the following code:
+
+```python
 >>> days = [
 >>>     'Monday',
 >>>     'Tuesday',
