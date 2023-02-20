@@ -255,7 +255,3 @@ def main():
             max_prediction_tokens=args.max_prediction_tokens,
             prediction_temperature=args.prediction_temperature,
         )
-
-
-if __name__ == "__main__":
-    main()

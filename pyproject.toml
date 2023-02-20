@@ -14,3 +14,6 @@ openai = "^0.26.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+natural-python = "natural_python.console:main"
