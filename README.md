@@ -33,7 +33,9 @@ the interpreter will write the following code:
 
 ## Installation
 
-`pip install --user git+https://gitlab.com/da_doomer/natural-python.git`
+`pip install --user --upgrade git+https://gitlab.com/da_doomer/natural-python.git`
+
+(You can remove `--upgrade` if your pip is reasonably updated)
 
 Then simply execute `natural-python --output my_script.py` in your shell (`--output` is an optional parameter).
 
