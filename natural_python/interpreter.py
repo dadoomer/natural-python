@@ -60,8 +60,7 @@ def get_code_output(
         python_code: str,
         python_shell: str,
         ) -> str:
-    """Execute the given prefix (current_code), then execute given suffix
-    (new_code) in a Python interpreter. Return the output.
+    """Return the stdout of executing `python_code` with the Python interpreter.
     `python_shell` is the command used to spawn a Python shell."""
     # Create a temporary Python source file
     with tempfile.NamedTemporaryFile("wt", prefix="natural-python", suffix='.py', delete=False) as python_src_file:
