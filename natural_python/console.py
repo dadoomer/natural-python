@@ -264,7 +264,7 @@ def main():
     if args.show_engines:
         engines = language_model_api.get_engines(
             api_key=api_key,
-            api_base=args.api_base,
+            api_base=api_base,
         )
         print(engines)
     else:
