@@ -205,8 +205,10 @@ def repl(
                 # Add line to log data
                 if user_input in keywords:
                     # Keywords should always be displayed consistently,
-                    # so we reprint the line as a comment
-                    ui_log_data.append(f">>> # {user_input}")
+                    # so we reprint the line as a comment...
+                    # Except if the keyword is 'python', which is not displayed.
+                    if user_input != python_keyword:
+                        ui_log_data.append(f">>> # {user_input}")
                 else:
                     ui_log_data.append(prompt+user_input)
 
