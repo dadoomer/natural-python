@@ -10,9 +10,9 @@ def get_engines(api_key: str, api_base: str) -> Any:
     return engines
 
 
-def get_engine_ids(api_key: str) -> list[str]:
+def get_engine_ids(api_key: str, api_base: str) -> list[str]:
     openai.api_key = api_key
-    openai.api_base = "https://api.goose.ai/v1"
+    openai.api_base = api_base
     engines = openai.Engine.list()
     engine_ids = [
         str(engine['id'])

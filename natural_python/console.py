@@ -269,7 +269,7 @@ def main():
         print(engines)
     else:
         engine_id = args.engine_id
-        if engine_id not in language_model_api.get_engine_ids(api_key):
+        if engine_id not in language_model_api.get_engine_ids(api_key, api_base):
             raise ValueError(f'Invalid engine {engine_id}')
         code = repl(
             engine_id=engine_id,
