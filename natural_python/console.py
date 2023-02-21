@@ -231,6 +231,7 @@ def main():
     parser = argparse.ArgumentParser(
             description='Natural Python interpreter.',
             epilog=f'The API configuration file is {api_file}. Delete this file if you want to change keys',
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         )
     parser.add_argument(
         '--engine-id',
@@ -258,7 +259,7 @@ def main():
     )
     parser.add_argument(
         '--python-shell',
-        help="Engine used for sampling.",
+        help="Command used to spawn a Python interpreter. If None, a best guess will be made.",
         type=str,
     )
     parser.add_argument(
@@ -268,7 +269,7 @@ def main():
     )
     parser.add_argument(
         '--output',
-        help="Write the source code to a file at the end of the session.",
+        help="Output file to write session script. If None, output will be written to a temporary file.",
         type=Path,
         default=None,
     )
