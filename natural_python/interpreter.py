@@ -4,12 +4,7 @@ from natural_python.language_model_api import get_completions
 import tempfile
 import subprocess
 import shlex
-from rich.progress import (
-    BarColumn,
-    Progress,
-    TextColumn,
-    TimeRemainingColumn,
-)
+from rich.progress import Progress
 
 
 @dataclass
@@ -119,7 +114,7 @@ def execute_natural_program(
     lm_prompt = get_prompt(current_code=current_python_code, program=program)
 
     # Sample language model for completions
-    with Progress(transient=True) as progress:
+    with Progress() as progress:
         progress.add_task('Sampling language model', total=None)
         completions = get_completions(
             prompt=lm_prompt,
@@ -132,13 +127,14 @@ def execute_natural_program(
         )
 
     # Find a completion that does not crash the program
-    with Progress(transient=True) as progress:
+    with Progress() as progress:
         task_progress = progress.add_task('Searching samples', total=sample_n)
         for completion in completions:
             new_code = [
                 *completion,
                 *program.constraint,
             ]
+            progress.advance(task_progress)
             progress.update(task_progress)
             try:
                 output = get_new_code_output(
