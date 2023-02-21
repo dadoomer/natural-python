@@ -1,11 +1,10 @@
 # natural-python
 
-[Official Gitlab repo](https://gitlab.com/da_doomer/natural-python) | [Github mirror](https://github.com/dadoomer/natural-python)
+[Official Gitlab repo](https://gitlab.com/da_doomer/natural-python) | [Github mirror](https://github.com/dadoomer/natural-python) | [Blog post](https://iamleo.space/2023-02-20-llm-python-repl/)
 
-Natural Python is an intermediary between you (who speaks in natural language)
-and the computer (who speaks Python).
+This is a wrapper around the Python REPL which uses LLMs to search for code that matches your natural language specification and Python constraints.
 
-More concretely, this is a wrapper around the Python REPL which uses LLMs to search for code that matches your natural language specification and Python constraints.
+Naturally, from a safety perspective the output of a LLM can only be assumed to be adversarial. Indeed, executing the output of an LLM is an inherently dangerous approach to implementing a REPL. Use at your own peril.
 
 ## Example
 
