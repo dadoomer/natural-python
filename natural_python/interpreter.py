@@ -1,4 +1,5 @@
 """Natural Python semantics."""
+from typing import Optional
 from dataclasses import dataclass
 from natural_python.language_model_api import get_completions
 import tempfile
@@ -20,8 +21,12 @@ class NaturalProgram:
 
 class NaturalInterpreterError(Exception):
     """Raised when the interpreter fails to find Python code that does not
-    crash the program."""
-    pass
+    crash the program.
+
+    Stores the first code that was evaluated.
+    """
+    def __init__(self, first_code: Optional[list[str]]):
+        self.first_code = first_code
 
 
 class PythonInterpreterError(Exception):
@@ -124,7 +129,10 @@ def execute_natural_program(
     )
 
     # Find a completion that does not crash the program
+    first_code = None
     for completion in completions:
+        if first_code is None:
+            first_code = completion
         new_code = [
             *completion,
             *program.constraint,
@@ -139,4 +147,4 @@ def execute_natural_program(
         except PythonInterpreterError:
             pass
 
-    raise NaturalInterpreterError()
+    raise NaturalInterpreterError(first_code)

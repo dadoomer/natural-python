@@ -173,8 +173,11 @@ def repl(
                     *commented_instructions,
                     *new_python_code,
                 ])
-            except interpreter.NaturalInterpreterError:
+            except interpreter.NaturalInterpreterError as e:
                 ui_log_data.append("ERROR: Failed to execute code with budget. Maybe try more detailed instructions?")
+                if e.first_code is not None:
+                    ui_log_data.append("This is the first code that was considered:")
+                    ui_log_data.extend(e.first_code)
 
             state = State.restarting_instruction_reading
         else:
