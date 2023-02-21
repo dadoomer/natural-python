@@ -37,6 +37,8 @@ the interpreter will write the following code:
 
 Then simply execute `natural-python --output my_script.py` in your shell (`--output` is an optional parameter).
 
+The first time the interpreter is executed, it will ask for an API key. Currently, the interpreter supports GooseAI and OpenAI endpoints.
+
 ## Usage
 
 Run `natural-python --help` to get the following:
