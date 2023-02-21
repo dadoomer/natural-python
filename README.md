@@ -34,9 +34,7 @@ the interpreter will write the following code:
 
 ## Installation
 
-`pip install --user --upgrade git+https://gitlab.com/da_doomer/natural-python.git`
-
-(You can remove `--upgrade` if your pip is reasonably updated)
+`pip install natural-python`
 
 Then simply execute `natural-python --output my_script.py` in your shell (`--output` is an optional parameter).
 
@@ -66,3 +64,9 @@ options:
   --show-engines        Display available language model engines.
   --output OUTPUT       Write the source code to a file at the end of the session.
 ```
+
+## Troubleshooting
+
+If you have errors on installation, try upgrading your pip first:
+
+`python -m pip install --user --upgrade natural-python`
