@@ -7,6 +7,7 @@ import argparse
 from natural_python import language_model_api
 from natural_python import interpreter
 from pathlib import Path
+import shutil
 import json
 
 
@@ -43,6 +44,11 @@ help_message = "\n".join([
     "+++",
     "",
 ])
+
+python_shell_candidates = [
+    "python3",
+    "python",
+]
 
 
 class State(Enum):
@@ -243,7 +249,6 @@ def main():
         '--python_shell',
         help="Engine used for sampling.",
         type=str,
-        default="python3",
     )
     parser.add_argument(
         '--show-engines',
@@ -268,14 +273,28 @@ def main():
         )
         print(engines)
     else:
+        # Check that the engine is valid
         engine_id = args.engine_id
         if engine_id not in language_model_api.get_engine_ids(api_key, api_base):
             raise ValueError(f'Invalid engine {engine_id}')
+
+        # Decide a python shell
+        if args.python_shell is not None:
+            python_shell: (None|str) = args.python_shell
+        else:
+            python_shell = None
+            for python_shell_candidate in python_shell_candidates:
+                if shutil.which(python_shell_candidate) is not None:
+                    python_shell = python_shell_candidate
+        if python_shell is None or shutil.which(python_shell) is None:
+            raise ValueError(f"Invalid Python shell {python_shell}")
+
+        # Run the REPL
         code = repl(
             engine_id=engine_id,
             api_key=api_key,
             completion_n=args.completion_n,
-            python_shell=args.python_shell,
+            python_shell=python_shell,
             api_base=api_base,
             max_prediction_tokens=args.max_prediction_tokens,
             prediction_temperature=args.prediction_temperature,
