@@ -4,6 +4,12 @@ from natural_python.language_model_api import get_completions
 import tempfile
 import subprocess
 import shlex
+from rich.progress import (
+    BarColumn,
+    Progress,
+    TextColumn,
+    TimeRemainingColumn,
+)
 
 
 @dataclass
@@ -113,30 +119,35 @@ def execute_natural_program(
     lm_prompt = get_prompt(current_code=current_python_code, program=program)
 
     # Sample language model for completions
-    completions = get_completions(
-        prompt=lm_prompt,
-        sample_n=sample_n,
-        api_key=api_key,
-        api_base=api_base,
-        engine_id=engine_id,
-        max_tokens=max_sample_tokens,
-        temperature=sample_temperature,
-    )
+    with Progress(transient=True) as progress:
+        progress.add_task('Sampling language model', total=None)
+        completions = get_completions(
+            prompt=lm_prompt,
+            sample_n=sample_n,
+            api_key=api_key,
+            api_base=api_base,
+            engine_id=engine_id,
+            max_tokens=max_sample_tokens,
+            temperature=sample_temperature,
+        )
 
     # Find a completion that does not crash the program
-    for completion in completions:
-        new_code = [
-            *completion,
-            *program.constraint,
-        ]
-        try:
-            output = get_new_code_output(
-                new_code=new_code,
-                current_code=current_python_code,
-                python_shell=python_shell,
-            )
-            return new_code, output
-        except PythonInterpreterError:
-            pass
+    with Progress(transient=True) as progress:
+        task_progress = progress.add_task('Searching samples', total=sample_n)
+        for completion in completions:
+            new_code = [
+                *completion,
+                *program.constraint,
+            ]
+            progress.update(task_progress)
+            try:
+                output = get_new_code_output(
+                    new_code=new_code,
+                    current_code=current_python_code,
+                    python_shell=python_shell,
+                )
+                return new_code, output
+            except PythonInterpreterError:
+                pass
 
     raise NaturalInterpreterError()

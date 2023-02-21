@@ -9,6 +9,7 @@ packages = [{include = "natural_python"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 openai = "^0.26.5"
+rich = "^13.3.1"
 
 
 [build-system]

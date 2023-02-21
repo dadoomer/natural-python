@@ -9,6 +9,9 @@ from natural_python import interpreter
 from pathlib import Path
 import shutil
 import json
+from rich.markdown import Markdown
+from rich.console import Console
+import tempfile
 
 
 # Is this a security risk?
@@ -27,23 +30,30 @@ keywords = [
     python_keyword,
 ]
 
-help_message = "\n".join([
-    "DO NOT ATTEMPT, EVER, TO EXECUTE CODE THAT MODIFIES YOUR FILESYSTEM. INTERACTING WITH THIS TOOL IS EXTREMELY RISKY, DO SO AT YOUR OWN PERIL.",
-    "In Natural Python, you primarily express intent with natural language.",
-    "",
-    "A block of commented lines represents your intent.",
-    "Everything in a block represents a single instruction.",
-    f"Additionally, you can guide the execution by ending the comment block with '{constraint_keyword}', followed by a line break and Python code that has to run successfully after executing your instruction.",
-    "Once you enter an empty line, your intent will be executed by the computer by finding Python code that runs without exceptions.",
-    "",
-    "The following illustrates these concepts. Try it out!",
-    "",
-    ">>> # Create a list with the days of the week, call it 'days'",
-    f">>> # {constraint_keyword}",
-    "+++ assert days[0] == 'Monday'",
-    "+++",
-    "",
-])
+
+def print_help_message():
+    help_message = Markdown(
+        f"""DO NOT ATTEMPT, EVER, TO EXECUTE CODE THAT MODIFIES YOUR FILESYSTEM. INTERACTING WITH THIS TOOL IS EXTREMELY RISKY, DO SO AT YOUR OWN PERIL.
+
+In Natural Python, you primarily express intent with natural language.
+
+- A block of commented lines represents your intent.
+- Everything in a block represents a single instruction.
+- You can constrain the execution by ending the comment block with '{constraint_keyword}', followed by a line break and Python code that has to run successfully after executing your instruction.
+
+Once you enter an empty line, your intent will be executed by the computer by finding Python code that runs without exceptions.
+
+The following illustrates these concepts. Try it out!
+
+```py
+>>> # Create a list with the days of the week, call it 'days'
+>>> # {constraint_keyword}"
++++ assert days[0] == 'Monday'
++++```
+"""
+    )
+    console = Console()
+    console.print(help_message)
 
 python_shell_candidates = [
     "python3",
@@ -158,7 +168,7 @@ def repl(
                     # User input is a keyword
                     if user_input == help_keyword:
                         # Help
-                        print(help_message)
+                        print_help_message()
                     elif user_input == exit_keyword:
                         keep_interpreting = False
                     elif user_input == constraint_keyword:
@@ -303,5 +313,14 @@ def main():
 
         # Write interaction if requested
         if args.output is not None:
-            with open(args.output, "wt") as fp:
-                fp.write("\n".join(code))
+            output_file = args.output
+        else:
+            output_file = Path(tempfile.NamedTemporaryFile(
+                'wt',
+                delete=False,
+                prefix='natural-python',
+                suffix='.py',
+            ).name)
+        with open(output_file, "wt") as fp:
+            fp.write("\n".join(code))
+        print(f"Session log script written to {output_file}")
