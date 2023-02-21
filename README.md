@@ -4,6 +4,8 @@
 
 This is a wrapper around the Python REPL which uses LLMs to search for code that matches your natural language specification and Python constraints.
 
+Naturally, from a safety perspective the output of a LLM can only be assumed to be adversarial. Indeed, executing the output of an LLM is an inherently dangerous approach to implementing a REPL. Use at your own peril.
+
 ## Example
 
 Hello world session: given this input
