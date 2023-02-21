@@ -13,7 +13,7 @@ Hello world session: given this input
 ```python
 >>> # Create a list with the days of the week, call it 'days'
 >>> # finally:
-+++ assert days[0] == 'Monday'
++++ assert days[0] == 'Sunday'
 +++
 ```
 
@@ -21,6 +21,7 @@ the interpreter will write the following code:
 
 ```python
 >>> days = [
+>>>     'Sunday',
 >>>     'Monday',
 >>>     'Tuesday',
 >>>     'Wednesday',
@@ -28,7 +29,7 @@ the interpreter will write the following code:
 >>>     'Friday',
 >>>     'Saturday',
 >>> ]
->>> assert days[0] == 'Monday'
+>>> assert days[0] == 'Sunday'
 ```
 
 ## Installation

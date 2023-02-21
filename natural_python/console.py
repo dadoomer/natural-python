@@ -70,7 +70,7 @@ The following illustrates these concepts. Try it out!
 
 >>> # Create a list with the days of the week, call it 'days'
 >>> # {constraint_keyword}"
-+++ assert days[0] == 'Monday'
++++ assert days[0] == 'Sunday'
 +++
 """
     return help_message.split('\n')
