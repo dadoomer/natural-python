@@ -67,6 +67,6 @@ options:
 
 ## Troubleshooting
 
-If you have errors on installation, try upgrading your pip first:
+If you have errors on installation, try upgrading pip first:
 
 `python -m pip install --user --upgrade natural-python`
