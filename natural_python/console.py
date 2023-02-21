@@ -53,7 +53,7 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def print_help_message():
+def get_help_message() -> list[str]:
     help_message =\
         f"""DO NOT ATTEMPT, EVER, TO EXECUTE CODE THAT MODIFIES YOUR FILESYSTEM. INTERACTING WITH THIS TOOL IS EXTREMELY RISKY, DO SO AT YOUR OWN PERIL.
 
@@ -68,13 +68,12 @@ Once you enter an empty line, your intent will be executed by the computer by fi
 
 The following illustrates these concepts. Try it out!
 
-```py
 >>> # Create a list with the days of the week, call it 'days'
 >>> # {constraint_keyword}"
 +++ assert days[0] == 'Monday'
 +++
-```"""
-    print(help_message)
+"""
+    return help_message.split('\n')
 
 python_shell_candidates = [
     "python3",
@@ -151,6 +150,7 @@ def repl(
             )
             # Execute natural program
             try:
+                print('Please wait...')
                 new_python_code, output = interpreter.execute_natural_program(
                     program=program,
                     current_python_code=current_python_code,
@@ -194,6 +194,7 @@ def repl(
                 # Hate to hack around a bit, but we need to render
                 # the UI and read user input simultaneously
                 user_input = str(input(prompt))
+                print(user_input)
 
                 # Sanitize user input
                 user_input = user_input.strip()
@@ -208,11 +209,10 @@ def repl(
 
                 # Check if input is a keyword
                 if user_input in keywords:
-
                     # Decide how to proceed
                     if user_input == help_keyword:
                         # Help
-                        print_help_message()
+                        ui_log_data.extend(get_help_message())
                     elif user_input == exit_keyword:
                         keep_interpreting = False
                     elif user_input == constraint_keyword:
