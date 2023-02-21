@@ -23,7 +23,7 @@ def get_engine_ids(api_key: str, api_base: str) -> list[str]:
 
 def get_completions(
         prompt: str,
-        completion_n: int,
+        sample_n: int,
         api_key: str,
         engine_id: str,
         max_tokens: int,
@@ -39,7 +39,7 @@ def get_completions(
         prompt=prompt,
         max_tokens=max_tokens,
         stream=False,
-        n=completion_n,
+        n=sample_n,
         stop=stop_sequences,
         temperature=temperature,
     )

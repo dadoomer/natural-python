@@ -100,13 +100,13 @@ def get_new_code_output(
 def execute_natural_program(
         program: NaturalProgram,
         current_python_code: list[str],
-        completion_n: int,
+        sample_n: int,
         python_shell: str,
         engine_id: str,
         api_key: str,
         api_base: str,
-        max_prediction_tokens: int,
-        prediction_temperature: float,
+        max_sample_tokens: int,
+        sample_temperature: float,
         ) -> tuple[list[str], str]:
     """Returns the new Python code that was executed, and the output of that code to stdout."""
     # Construct prompt
@@ -115,12 +115,12 @@ def execute_natural_program(
     # Sample language model for completions
     completions = get_completions(
         prompt=lm_prompt,
-        completion_n=completion_n,
+        sample_n=sample_n,
         api_key=api_key,
         api_base=api_base,
         engine_id=engine_id,
-        max_tokens=max_prediction_tokens,
-        temperature=prediction_temperature,
+        max_tokens=max_sample_tokens,
+        temperature=sample_temperature,
     )
 
     # Find a completion that does not crash the program

@@ -1,6 +1,6 @@
 # natural-python
 
-[Official Gitlab repo](https://gitlab.com/da_doomer/natural-python) | [Github mirror](https://github.com/dadoomer/natural-python) | [Blog post](https://iamleo.space/2023-02-20-llm-python-repl/)
+[Gitlab repository](https://gitlab.com/da_doomer/natural-python) | [Github mirror](https://github.com/dadoomer/natural-python) | [Blog post](https://iamleo.space/2023-02-20-llm-python-repl/)
 
 This is a wrapper around the Python REPL which uses LLMs to search for code that matches your natural language specification and Python constraints.
 
@@ -46,23 +46,22 @@ The first time the interpreter is executed, it will ask for an API key. Currentl
 Run `natural-python --help` to get the following:
 
 ```
-usage: natural-python [-h] [--engine_id ENGINE_ID] [--completion_n COMPLETION_N] [--prediction_temperature PREDICTION_TEMPERATURE]
-                      [--max_prediction_tokens MAX_PREDICTION_TOKENS] [--python_shell PYTHON_SHELL] [--show-engines] [--output OUTPUT]
+usage: natural-python [-h] [--engine-id ENGINE_ID] [--sample-n SAMPLE_N] [--sample-temperature SAMPLE_TEMPERATURE] [--max-sample-tokens MAX_SAMPLE_TOKENS]
+                      [--python-shell PYTHON_SHELL] [--show-engines] [--output OUTPUT]
 
 Natural Python interpreter.
 
 options:
   -h, --help            show this help message and exit
-  --engine_id ENGINE_ID
-                        Engine used for sampling.
-  --completion_n COMPLETION_N
-                        Engine used for sampling.
-  --prediction_temperature PREDICTION_TEMPERATURE
+  --engine-id ENGINE_ID
+                        Language model engine used for sampling.
+  --sample-n SAMPLE_N   Number of samples drawn from the language model when executing an instruction.
+  --sample-temperature SAMPLE_TEMPERATURE
                         Sampling temperature.
-  --max_prediction_tokens MAX_PREDICTION_TOKENS
-                        Maximum number of tokens in each candidate solution.
-  --python_shell PYTHON_SHELL
+  --max-sample-tokens MAX_SAMPLE_TOKENS
+                        Maximum number of tokens in each sample.
+  --python-shell PYTHON_SHELL
                         Engine used for sampling.
-  --show-engines        Display available engines.
+  --show-engines        Display available language model engines.
   --output OUTPUT       Write the source code to a file at the end of the session.
 ```

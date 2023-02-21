@@ -75,6 +75,7 @@ def print_start_message(
         f"Type {restart_keyword} to erase your current instruction.",
         f"Type {python_keyword} to bypass the Natural Python interpreter and write raw Python to the stream.",
         f"Type {help_keyword} for more information.",
+        f"Run the interpreter with --help for more options.",
     ])
     print(start_message)
 
@@ -83,9 +84,9 @@ def repl(
         engine_id: str,
         api_key: str,
         api_base: str,
-        max_prediction_tokens: int,
-        completion_n: int,
-        prediction_temperature: float,
+        max_sample_tokens: int,
+        sample_n: int,
+        sample_temperature: float,
         python_shell: str,
         ) -> list[str]:
     """Read-eval-print loop. Returns the executed python code."""
@@ -115,13 +116,13 @@ def repl(
                 new_python_code, output = interpreter.execute_natural_program(
                     program=program,
                     current_python_code=current_python_code,
-                    completion_n=completion_n,
+                    sample_n=sample_n,
                     python_shell=python_shell,
                     engine_id=engine_id,
                     api_key=api_key,
                     api_base=api_base,
-                    max_prediction_tokens=max_prediction_tokens,
-                    prediction_temperature=prediction_temperature,
+                    max_sample_tokens=max_sample_tokens,
+                    sample_temperature=sample_temperature,
                 )
 
                 # Print executed code
@@ -222,37 +223,37 @@ def main():
             epilog=f'The API configuration file is {api_file}. Delete this file if you want to change keys',
         )
     parser.add_argument(
-        '--engine_id',
-        help="Engine used for sampling.",
+        '--engine-id',
+        help="Language model engine used for sampling.",
         type=str,
         default="gpt-neo-125m",
     )
     parser.add_argument(
-        '--completion_n',
-        help="Engine used for sampling.",
+        '--sample-n',
+        help="Number of samples drawn from the language model when executing an instruction.",
         type=int,
         default=10,
     )
     parser.add_argument(
-        '--prediction_temperature',
+        '--sample-temperature',
         help="Sampling temperature.",
         type=float,
         default=0.2,
     )
     parser.add_argument(
-        '--max_prediction_tokens',
-        help="Maximum number of tokens in each candidate solution.",
+        '--max-sample-tokens',
+        help="Maximum number of tokens in each sample.",
         type=int,
         default=100,
     )
     parser.add_argument(
-        '--python_shell',
+        '--python-shell',
         help="Engine used for sampling.",
         type=str,
     )
     parser.add_argument(
         '--show-engines',
-        help="Display available engines.",
+        help="Display available language model engines.",
         action='store_true',
     )
     parser.add_argument(
@@ -293,11 +294,11 @@ def main():
         code = repl(
             engine_id=engine_id,
             api_key=api_key,
-            completion_n=args.completion_n,
+            sample_n=args.sample_n,
             python_shell=python_shell,
             api_base=api_base,
-            max_prediction_tokens=args.max_prediction_tokens,
-            prediction_temperature=args.prediction_temperature,
+            max_sample_tokens=args.max_sample_tokens,
+            sample_temperature=args.sample_temperature,
         )
 
         # Write interaction if requested
