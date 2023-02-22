@@ -67,6 +67,12 @@ options:
 
 ## Troubleshooting
 
+### Installation
+
 If you have errors on installation, try upgrading pip first:
 
 `python -m pip install --user --upgrade natural-python`
+
+### Out of budget
+
+In case your instructions are not executed, you can try to change to a larger model, increase samples, increase max sample tokens or play with other search parameters. You can also provide a more detailed instruction, or first write Python code yourself to steer the sampling process towards something that is useful for your task.
