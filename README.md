@@ -67,6 +67,8 @@ options:
 
 ## Troubleshooting
 
+Please share any problems, questions or suggestions, either as a [Gitlab issue](https://gitlab.com/da_doomer/natural-python/-/issues) or [Github issue](https://github.com/dadoomer/natural-python/issues).
+
 ### Installation
 
 If you have errors on installation, try upgrading pip first:
