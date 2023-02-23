@@ -36,7 +36,7 @@ the interpreter will write the following code:
 
 `pip install natural-python`
 
-Then simply execute `natural-python --output my_script.py` in your shell (`--output` is an optional parameter).
+Then simply execute `natural-python --output my_script.py` in your shell (`--output` is an optional parameter used to save session as a Python script).
 
 The first time the interpreter is executed, it will ask for an API key. Currently, the interpreter supports GooseAI and OpenAI endpoints.
 
